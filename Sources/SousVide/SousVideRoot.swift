@@ -9,6 +9,7 @@ struct SousVideRoot: View {
     var appDelegate: AppDelegate?
     @ObservedObject private var sous = SousManager.shared
     @ObservedObject private var theme = ThemeManager.shared
+    @ObservedObject private var coexist = CoexistenceMonitor.shared
     @State private var showingSettings = false
     @State private var panelSize: CGSize = PanelLayout.current
 
@@ -26,6 +27,13 @@ struct SousVideRoot: View {
                 if showingSettings {
                     SousVideSettings()
                         .transition(.move(edge: .trailing).combined(with: .opacity))
+                } else if coexist.shouldYield {
+                    TakeoverCard(onKeep: {
+                        withAnimation(.spring(response: 0.38, dampingFraction: 0.82)) {
+                            coexist.dismissedThisLaunch = true
+                        }
+                    })
+                    .transition(.opacity)
                 } else {
                     SousView(sous: sous)
                         .transition(.move(edge: .leading).combined(with: .opacity))
