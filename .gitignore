@@ -1,0 +1,17 @@
+.DS_Store
+*.swp
+*.swo
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+Package.resolved
+
+# Build output
+dist/
+
+# The built app bundle's signed binary is produced by deploy.sh / release.sh
+SousVide.app/Contents/MacOS/
+SousVide.app/Contents/Frameworks/
+SousVide.app/Contents/_CodeSignature/

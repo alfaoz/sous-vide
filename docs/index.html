@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>sous-vide — keep your Mac's battery healthy</title>
+<meta name="description" content="A tiny macOS menu-bar app that caps how far your battery charges, to slow long-term wear." />
+<style>
+  :root { --accent: #66D9FF; --bg: #060608; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    background: var(--bg); color: #fff; -webkit-font-smoothing: antialiased;
+    min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 40px 24px; overflow-x: hidden;
+  }
+  .glow { position: fixed; border-radius: 50%; filter: blur(110px); opacity: 0.5; z-index: -1; }
+  .g1 { width: 360px; height: 360px; background: #66D9FF; top: -120px; left: -80px; }
+  .g2 { width: 320px; height: 320px; background: #2f7e9e; bottom: -120px; right: -60px; opacity: 0.4; }
+  .mark {
+    width: 96px; height: 96px; border-radius: 24px; background: #fff;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .mark svg { width: 54px; height: 54px; }
+  h1 { font-size: 44px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 14px; }
+  h1 .accent { color: var(--accent); }
+  p.tag { font-size: 18px; color: rgba(255,255,255,0.62); max-width: 540px; line-height: 1.5; margin-bottom: 32px; }
+  .cta {
+    display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #06121a;
+    background: var(--accent); font-weight: 600; font-size: 15px; padding: 13px 26px; border-radius: 999px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease; box-shadow: 0 10px 30px rgba(102,217,255,0.25);
+  }
+  .cta:hover { transform: translateY(-2px); box-shadow: 0 14px 38px rgba(102,217,255,0.35); }
+  .sub { margin-top: 14px; font-size: 13px; color: rgba(255,255,255,0.4); }
+  .sub a { color: rgba(255,255,255,0.6); }
+  .features { display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; margin-top: 56px; max-width: 760px; }
+  .feature { width: 220px; text-align: left; }
+  .feature h3 { font-size: 15px; margin-bottom: 6px; }
+  .feature p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+  footer { margin-top: 64px; font-size: 12px; color: rgba(255,255,255,0.3); }
+  footer a { color: rgba(255,255,255,0.45); }
+</style>
+</head>
+<body>
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+
+  <div class="mark" aria-hidden="true">
+    <!-- heart.badge.bolt, black -->
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 20.5C12 20.5 3 15 3 8.8C3 5.9 5.1 4 7.6 4C9.4 4 11 5 12 6.4C13 5 14.6 4 16.4 4C17 4 17.6 4.1 18.1 4.3"
+            stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M19 3.5L15.5 9H19L15 14.5" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <h1><span class="accent">sous</span>-vide</h1>
+  <p class="tag">Cap how far your Mac's battery charges — slow long-term wear and keep it healthy. A tiny menu-bar app, on its own glass panel.</p>
+
+  <a class="cta" href="https://github.com/alfaoz/sous-vide/releases/latest">↓ Download for macOS</a>
+  <div class="sub">Apple Silicon · free &amp; open source · <a href="https://github.com/alfaoz/sous-vide">source on GitHub</a></div>
+
+  <div class="features">
+    <div class="feature"><h3>Charge limit + sailing</h3><p>Hold at your limit and only resume charging after a band, killing micro-cycles.</p></div>
+    <div class="feature"><h3>Heat protection</h3><p>Pause charging when the battery runs hot, with hysteresis so it doesn't flap.</p></div>
+    <div class="feature"><h3>Top up &amp; discharge</h3><p>One-shot charge to 100% before a trip, or actively drain to your limit while plugged in.</p></div>
+    <div class="feature"><h3>Calibration</h3><p>Run a full calibration cycle on a schedule to keep the fuel gauge accurate.</p></div>
+  </div>
+
+  <footer>
+    Sibling of <a href="https://github.com/oxineapp/oxine">Oxine</a> · GPL-3.0
+  </footer>
+</body>
+</html>
