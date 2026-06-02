@@ -119,9 +119,12 @@ struct TakeoverCard: View {
             // Drop control immediately so Oxine's daemon can grab the lock.
             SousManager.shared.setEnabled(false)
             await SousManager.shared.helper.uninstall()
-            if case .failed(let why) = SousManager.shared.helper.installState {
+            // uninstall() swallows an admin-prompt cancel, so confirm the daemon
+            // is actually gone before we trash the app or quit — otherwise a
+            // cancelled prompt would still nuke a working install.
+            if HelperBranding.sousVide.isDaemonInstalled {
                 working = false
-                errorText = why
+                errorText = "Couldn't remove the helper — authorization was cancelled."
                 return
             }
             if trashApp {

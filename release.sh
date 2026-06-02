@@ -26,7 +26,11 @@ TAG="v$VERSION"
 DOWNLOAD_PREFIX="https://github.com/$REPO/releases/download/$TAG/"
 
 PUBLISH=0
-[ "$1" = "--publish" ] && PUBLISH=1
+CRITICAL=0
+for arg in "$@"; do
+  [ "$arg" = "--publish" ] && PUBLISH=1
+  [ "$arg" = "--critical" ] && CRITICAL=1   # mark this release mandatory (no Skip/Later)
+done
 
 SPARKLE_BIN=".build/artifacts/sparkle/Sparkle/bin"
 SPARKLE_FW=$(find .build/artifacts -path "*macos-arm64_x86_64/Sparkle.framework" -type d 2>/dev/null | head -1)
@@ -68,6 +72,23 @@ ditto -c -k --keepParent "$DIST/$APP" "$UPDATES/SousVide-$VERSION.zip"
   -o docs/appcast.xml \
   "$UPDATES"
 echo "  ✓ docs/appcast.xml ($VERSION)"
+
+# Stamp this version's appcast item as a critical update (Install only, no Skip/Later).
+if [ "$CRITICAL" = "1" ]; then
+  APPCAST="docs/appcast.xml" TARGET_VERSION="$VERSION" python3 - <<'PY'
+import os, re
+path, ver = os.environ["APPCAST"], os.environ["TARGET_VERSION"]
+xml = open(path).read()
+def mark(item):
+    if "sparkle:criticalUpdate" in item: return item
+    if f"<sparkle:shortVersionString>{ver}</sparkle:shortVersionString>" not in item: return item
+    return re.sub(r"(<sparkle:shortVersionString>.*?</sparkle:shortVersionString>)",
+                  r"\1\n            <sparkle:criticalUpdate></sparkle:criticalUpdate>", item, count=1)
+xml = re.sub(r"<item>.*?</item>", lambda m: mark(m.group(0)), xml, flags=re.S)
+open(path, "w").write(xml)
+print(f"  ✓ marked {ver} as a CRITICAL update")
+PY
+fi
 
 echo "▸ building DMG…"
 DMG="$DIST/SousVide-$VERSION.dmg"; VOL="sous-vide"; RW="$DIST/rw.dmg"

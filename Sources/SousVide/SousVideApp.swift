@@ -135,6 +135,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         let x = screenRect.midX - size.width / 2
         let y = screenRect.minY - size.height - 5
         CoexistenceMonitor.shared.refresh()   // re-check Oxine's Sous presence on each open
+        UpdaterManager.shared.checkOnOpen()   // throttled; pops the updater if one's waiting
         NSApp.activate(ignoringOtherApps: true)
         panel.setFrame(NSRect(x: x, y: y, width: size.width, height: size.height), display: true)
         panel.makeKeyAndOrderFront(nil)
